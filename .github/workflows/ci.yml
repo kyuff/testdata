@@ -16,4 +16,4 @@ jobs:
       - name: Build
         run: go build -v ./...
       - name: Test with Make
-        run: make test-all
+        run: go test ./... -count 1 -race
