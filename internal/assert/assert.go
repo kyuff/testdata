@@ -97,7 +97,7 @@ func NoneZero[T any, E ~[]T](t *testing.T, got E) bool {
 func NotZero[T any](t *testing.T, got T) bool {
 	t.Helper()
 	if reflect.ValueOf(got).IsZero() {
-		t.Logf("Value %T was zero: %s", got, got)
+		t.Logf("Value %T was zero: %v", got, got)
 		t.Fail()
 	}
 	return true
