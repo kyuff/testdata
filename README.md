@@ -80,3 +80,10 @@ func funcUnderTest(a, b Person) {
 	fmt.Printf("B: %#v\n", b)
 }
 ````
+
+Output:
+
+A: testdata_test.Person{Name:"Name-K1t8IV7mGP0x5GZ8", Age:9127679439778925705, Dish:"CAESAR_SALAD", City:"City-K7146TOeLlK8Vz3g"}
+
+B: testdata_test.Person{Name:"Name-ccwupn3InlxOzDTT", Age:6402903903958643118, Dish:"MILKSHAKE", City:"City-K7146TOeLlK8Vz3g"}
+
