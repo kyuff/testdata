@@ -17,7 +17,7 @@ func init() {
 
 func NewConfig(opts ...Option) *Config {
 	cfg := &Config{
-		rules:  make(map[reflect.Type]func() reflect.Value),
+		rules:  make(map[reflect.Type]func(r *rand.Rand) reflect.Value),
 		sticky: sticky.New(),
 		rand:   rand.New(rand.NewPCG(rand.Uint64(), rand.Uint64())),
 	}
@@ -29,7 +29,7 @@ func NewConfig(opts ...Option) *Config {
 }
 
 type Config struct {
-	rules  map[reflect.Type]func() reflect.Value
+	rules  map[reflect.Type]func(r *rand.Rand) reflect.Value
 	sticky *sticky.Manager
 	rand   *rand.Rand
 }
@@ -42,7 +42,7 @@ func (cfg *Config) make(t testingT, typ reflect.Type) reflect.Value {
 
 	rule, ok := cfg.rules[typ]
 	if ok {
-		return rule()
+		return rule(cfg.rand)
 	}
 
 	var pointer = typ.Kind() == reflect.Pointer

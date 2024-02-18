@@ -145,7 +145,7 @@ func TestMake(t *testing.T) {
 
 		t.Run("with sticky generator", func(t *testing.T) {
 			var (
-				cfg = testdata.NewConfig(testdata.WithGenerator(func() ID {
+				cfg = testdata.NewConfig(testdata.WithGenerator(func(r *rand.Rand) ID {
 					return "my id"
 				}))
 				id = testdata.MakeStickyWith[ID](t, cfg)
@@ -205,7 +205,7 @@ func TestMake(t *testing.T) {
 			var (
 				expected = rand.Int64()
 				cfg      = testdata.NewConfig(
-					testdata.WithGenerator(func() int64 {
+					testdata.WithGenerator(func(r *rand.Rand) int64 {
 						return expected
 					}),
 				)
