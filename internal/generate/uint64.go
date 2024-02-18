@@ -5,6 +5,6 @@ import (
 	"reflect"
 )
 
-func Uint64() reflect.Value {
+func Uint64(rand *rand.Rand) reflect.Value {
 	return reflect.ValueOf(rand.Uint64())
 }

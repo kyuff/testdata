@@ -5,6 +5,6 @@ import (
 	"reflect"
 )
 
-func Bool() reflect.Value {
+func Bool(rand *rand.Rand) reflect.Value {
 	return reflect.ValueOf(rand.Uint32()%2 == 0)
 }

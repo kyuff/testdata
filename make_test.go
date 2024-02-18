@@ -1,7 +1,7 @@
 package testdata_test
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"testing"
 	"time"
 
@@ -203,7 +203,7 @@ func TestMake(t *testing.T) {
 			t.Parallel()
 			// arrange
 			var (
-				expected = rand.Int63()
+				expected = rand.Int64()
 				cfg      = testdata.NewConfig(
 					testdata.WithGenerator(func() int64 {
 						return expected
@@ -216,6 +216,22 @@ func TestMake(t *testing.T) {
 
 			// assert
 			assert.Equal(t, expected, got)
+		})
+
+		t.Run("Rand", func(t *testing.T) {
+			t.Parallel()
+			// arrange
+			var (
+				cfg = testdata.NewConfig(
+					testdata.WithRand(rand.New(rand.NewPCG(1, 2))),
+				)
+			)
+
+			// act
+			got := testdata.MakeWith[int](t, cfg)
+
+			// assert
+			assert.Equal(t, 4969059760275911952, got)
 		})
 	})
 
@@ -659,6 +675,7 @@ func TestMake(t *testing.T) {
 
 	t.Run("time.Time", func(t *testing.T) {
 		t.Parallel()
+		const fourYears = time.Hour * 24 * 360 * 4
 		t.Run("make", func(t *testing.T) {
 			t.Parallel()
 			// arrange
@@ -670,7 +687,7 @@ func TestMake(t *testing.T) {
 			got := testdata.MakeWith[time.Time](t, cfg)
 
 			// assert
-			assert.TimeWithinWindow(t, time.Now(), got, time.Second)
+			assert.TimeWithinWindow(t, time.Now(), got, fourYears)
 		})
 
 		t.Run("make pointer", func(t *testing.T) {
@@ -685,7 +702,7 @@ func TestMake(t *testing.T) {
 
 			// assert
 			if assert.NotNil(t, got) {
-				assert.TimeWithinWindow(t, time.Now(), *got, time.Second)
+				assert.TimeWithinWindow(t, time.Now(), *got, fourYears)
 			}
 		})
 
@@ -702,7 +719,7 @@ func TestMake(t *testing.T) {
 			got := testdata.MakeWith[TestTime](t, cfg)
 
 			// assert
-			assert.TimeWithinWindow(t, time.Now(), time.Time(got), time.Second)
+			assert.TimeWithinWindow(t, time.Now(), time.Time(got), fourYears)
 		})
 
 	})

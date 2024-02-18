@@ -2,10 +2,10 @@ package generate
 
 import (
 	"math"
-	"math/rand"
+	"math/rand/v2"
 	"reflect"
 )
 
-func Int8() reflect.Value {
-	return reflect.ValueOf(int8(rand.Intn(math.MaxInt8)))
+func Int8(rand *rand.Rand) reflect.Value {
+	return reflect.ValueOf(int8(rand.IntN(math.MaxInt8)))
 }

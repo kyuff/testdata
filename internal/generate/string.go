@@ -2,7 +2,7 @@ package generate
 
 import (
 	"fmt"
-	"math/rand"
+	"math/rand/v2"
 	"reflect"
 )
 
@@ -11,10 +11,10 @@ var (
 	charCount = len(charList)
 )
 
-func String(typ reflect.Type, size uint16) reflect.Value {
+func String(r *rand.Rand, typ reflect.Type, size uint16) reflect.Value {
 	var b []byte
 	for i := 0; i < int(size); i++ {
-		b = append(b, charList[rand.Intn(charCount)])
+		b = append(b, charList[r.IntN(charCount)])
 	}
 
 	s := fmt.Sprintf("%s-%s", typ.Name(), string(b))

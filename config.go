@@ -1,6 +1,7 @@
 package testdata
 
 import (
+	"math/rand/v2"
 	"reflect"
 	"time"
 
@@ -18,8 +19,8 @@ func NewConfig(opts ...Option) *Config {
 	cfg := &Config{
 		rules:  make(map[reflect.Type]func() reflect.Value),
 		sticky: sticky.New(),
+		rand:   rand.New(rand.NewPCG(rand.Uint64(), rand.Uint64())),
 	}
-
 	for _, opt := range opts {
 		opt(cfg)
 	}
@@ -30,6 +31,7 @@ func NewConfig(opts ...Option) *Config {
 type Config struct {
 	rules  map[reflect.Type]func() reflect.Value
 	sticky *sticky.Manager
+	rand   *rand.Rand
 }
 
 func (cfg *Config) make(t testingT, typ reflect.Type) reflect.Value {
@@ -60,7 +62,7 @@ var timeType = reflect.TypeOf(time.Time{})
 
 func (cfg *Config) generateBuiltIn(t testingT, typ reflect.Type) reflect.Value {
 	if timeType.ConvertibleTo(typ) {
-		return generate.Time(typ)
+		return generate.Time(cfg.rand, typ)
 	}
 	var maker = func(typ reflect.Type) reflect.Value {
 		return cfg.make(t, typ)
@@ -73,33 +75,33 @@ func (cfg *Config) generateBuiltIn(t testingT, typ reflect.Type) reflect.Value {
 	case reflect.Map:
 		return generate.Map(typ, maker, 5)
 	case reflect.String:
-		return generate.String(typ, 16)
+		return generate.String(cfg.rand, typ, 16)
 	case reflect.Int:
-		return generate.Int()
+		return generate.Int(cfg.rand)
 	case reflect.Int8:
-		return generate.Int8()
+		return generate.Int8(cfg.rand)
 	case reflect.Int16:
-		return generate.Int16()
+		return generate.Int16(cfg.rand)
 	case reflect.Int32:
-		return generate.Int32()
+		return generate.Int32(cfg.rand)
 	case reflect.Int64:
-		return generate.Int64()
+		return generate.Int64(cfg.rand)
 	case reflect.Bool:
-		return generate.Bool()
+		return generate.Bool(cfg.rand)
 	case reflect.Uint:
-		return generate.Uint()
+		return generate.Uint(cfg.rand)
 	case reflect.Uint8:
-		return generate.Uint8()
+		return generate.Uint8(cfg.rand)
 	case reflect.Uint16:
-		return generate.Uint16()
+		return generate.Uint16(cfg.rand)
 	case reflect.Uint32:
-		return generate.Uint32()
+		return generate.Uint32(cfg.rand)
 	case reflect.Uint64:
-		return generate.Uint64()
+		return generate.Uint64(cfg.rand)
 	case reflect.Float32:
-		return generate.Float32()
+		return generate.Float32(cfg.rand)
 	case reflect.Float64:
-		return generate.Float64()
+		return generate.Float64(cfg.rand)
 	default:
 		return reflect.Zero(typ)
 	}
