@@ -1,10 +1,10 @@
 package generate
 
 import (
-	"math/rand"
+	"math/rand/v2"
 	"reflect"
 )
 
-func Int() reflect.Value {
+func Int(rand *rand.Rand) reflect.Value {
 	return reflect.ValueOf(rand.Int())
 }

@@ -6,6 +6,6 @@ import (
 	"reflect"
 )
 
-func Uint16() reflect.Value {
+func Uint16(rand *rand.Rand) reflect.Value {
 	return reflect.ValueOf(uint16(rand.UintN(math.MaxInt16)))
 }

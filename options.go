@@ -1,6 +1,9 @@
 package testdata
 
-import "reflect"
+import (
+	"math/rand/v2"
+	"reflect"
+)
 
 type Option func(cfg *Config)
 
@@ -37,4 +40,18 @@ func WithValues[T any, E ~[]T](values E) Option {
 	return WithGenerator(func() T {
 		return randFrom(values)
 	})
+}
+
+// Rand will use the provided *rand.Rand when generating
+// testdata using the DefaultConfig.
+func Rand(r *rand.Rand) {
+	WithRand(r)(DefaultConfig)
+}
+
+// WithRand will use the provided *rand.Rand when generating
+// testdata using the constructed Config.
+func WithRand(r *rand.Rand) Option {
+	return func(cfg *Config) {
+		cfg.rand = r
+	}
 }

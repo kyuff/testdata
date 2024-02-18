@@ -6,6 +6,6 @@ import (
 	"reflect"
 )
 
-func Uint() reflect.Value {
+func Uint(rand *rand.Rand) reflect.Value {
 	return reflect.ValueOf(rand.UintN(math.MaxUint))
 }
