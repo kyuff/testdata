@@ -2,10 +2,10 @@ package testdata_test
 
 import (
 	"fmt"
+	"math/rand/v2"
 	"testing"
 
 	"github.com/kyuff/testdata"
-	"github.com/kyuff/testdata/internal/assert"
 )
 
 type Name string
@@ -28,25 +28,25 @@ type Person struct {
 	City City
 }
 
-func TestExample(t *testing.T) {
-	// arrange
+func ExampleMakeWith() {
 	var (
+		t   = &testing.T{}
 		cfg = testdata.NewConfig(
 			testdata.WithValues(knownDishes),
+			testdata.WithRand(rand.New(rand.NewPCG(1, 2))), // stable output
 		)
 		_ = testdata.MakeStickyWith[City](t, cfg)
 		a = testdata.MakeWith[Person](t, cfg)
-		b = testdata.MakeWith[Person](t, cfg)
+		b = testdata.MakeWith[Person](t, cfg, func(person Person) Person {
+			person.Age = 32
+			return person
+		})
 	)
 
-	// act
-	funcUnderTest(a, b)
-
-	// assert
-	assert.Equal(t, a.City, b.City)
-}
-
-func funcUnderTest(a, b Person) {
 	fmt.Printf("A: %#v\n", a)
 	fmt.Printf("B: %#v\n", b)
+
+	// Output:
+	// A: testdata_test.Person{Name:"Name-Jv4k3Dc1kHJPXsAF", Age:38380406349626614, Dish:"SPAGHETTI", City:"City-LCMNe2ur8bFrW7oM"}
+	// B: testdata_test.Person{Name:"Name-0CWH6nUQnH3DqWyT", Age:32, Dish:"SPAGHETTI", City:"City-LCMNe2ur8bFrW7oM"}
 }
