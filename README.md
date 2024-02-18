@@ -24,7 +24,7 @@ Yes, the `testdata.MakeWith()` is only meant if you don't want to use the defaul
 ### Can I control how values are generated?
 
 Yes, use the option `testdata.WithGenerator` which accepts a func that provides a specific type. This func will be
-called each type there is a need to generate that specific type. This is a method to override the default generator.
+called each time there is a need to generate that specific type. This is a method to override the default generator.
 
 ## Example
 
