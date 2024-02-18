@@ -1,11 +1,11 @@
 package testdata
 
-import "math/rand"
+import "math/rand/v2"
 
-func randFrom[T any](values []T) T {
+func randFrom[T any](r *rand.Rand, values []T) T {
 	if len(values) == 0 {
 		var t T
 		return t
 	}
-	return values[rand.Intn(len(values))]
+	return values[r.IntN(len(values))]
 }
