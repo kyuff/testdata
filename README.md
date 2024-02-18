@@ -29,61 +29,22 @@ called each type there is a need to generate that specific type. This is a metho
 ## Example
 
 ````go
-import (
-	"fmt"
-	"testing"
-
-	"github.com/kyuff/testdata"
-	"github.com/kyuff/testdata/internal/assert"
-)
-
-type Name string
-type Age int
-type City string
-type Dish string
-
-const (
-	Spaghetti   Dish = "SPAGHETTI"
-	CaesarSalad Dish = "CAESAR_SALAD"
-	Milkshake   Dish = "MILKSHAKE"
-)
-
-var knownDishes = []Dish{Spaghetti, CaesarSalad, Milkshake}
-
-type Person struct {
-	Name Name
-	Age  Age
-	Dish Dish
-	City City
-}
-
-func TestExample(t *testing.T) {
-	// arrange
 	var (
-		cfg = testdata.NewConfig(
-			testdata.WithValues(knownDishes),
-		)
-		_ = testdata.MakeStickyWith[City](t, cfg)
-		a = testdata.MakeWith[Person](t, cfg)
-		b = testdata.MakeWith[Person](t, cfg)
+		t = &testing.T{}
+		_ = testdata.MakeSticky[City](t)
+		a = testdata.Make[Person](t)
+		b = testdata.Make[Person](t, func(person Person) Person {
+			person.Age = 32
+			return person
+		})
 	)
 
-	// act
-	funcUnderTest(a, b)
-
-	// assert
-	assert.Equal(t, a.City, b.City)
-}
-
-func funcUnderTest(a, b Person) {
 	fmt.Printf("A: %#v\n", a)
 	fmt.Printf("B: %#v\n", b)
-}
+
+	// Output:
+	// A: testdata_test.Person{Name:"My own name: 73", Age:50, Dish:"SPAGHETTI", City:"City-LCMNe2ur8bFrW7oM", Note:"string-k3Dc1kHJPXsAFv0C"}
+	// B: testdata_test.Person{Name:"My own name: 94", Age:32, Dish:"SPAGHETTI", City:"City-LCMNe2ur8bFrW7oM", Note:"string-nUQnH3DqWyTPPTEi"}
 ````
 
-Output:
-
-A: testdata_test.Person{Name:"Name-K1t8IV7mGP0x5GZ8", Age:9127679439778925705, Dish:"CAESAR_SALAD", City:"City-K7146TOeLlK8Vz3g"}
-
-B: testdata_test.Person{Name:"Name-ccwupn3InlxOzDTT", Age:6402903903958643118, Dish:"MILKSHAKE", City:"City-K7146TOeLlK8Vz3g"}
-
+Find more detailed examples [here](example_make_test.go) and [here](example_makewith_test.go).
