@@ -14,7 +14,7 @@ func Make[T any](t testingT, modifications ...func(d T) T) T {
 	return MakeWith[T](t, DefaultConfig, modifications...)
 }
 
-// MakeWith creates a value T based on the provided Config
+// MakeWith creates a value T based on tge Config parameter
 func MakeWith[T any](t testingT, cfg *Config, modifications ...func(d T) T) T {
 	var (
 		typ  = reflect.TypeFor[T]()
@@ -44,6 +44,7 @@ func MakeSticky[T any](t testingT, modifications ...func(d T) T) T {
 	return MakeStickyWith(t, DefaultConfig, modifications...)
 }
 
+// MakeStickyWith is similar to MakeSticky, just using cfg instead of DefaultConfig.
 func MakeStickyWith[T any](t testingT, cfg *Config, modifications ...func(d T) T) T {
 	var (
 		typ   = reflect.TypeFor[T]()

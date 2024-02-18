@@ -9,12 +9,17 @@ import (
 	"github.com/kyuff/testdata/internal/sticky"
 )
 
+// DefaultConfig is the Config that will be used with Make and MakeSticky.
+// Configure it using the options that are not prefixed using With, ie Values or Generator.
 var DefaultConfig *Config
 
+// init the DefaultConfig
 func init() {
 	DefaultConfig = NewConfig()
 }
 
+// NewConfig constructs a Config that can be used with MakeWith and MakeStickyWith.
+// Configure it using one ore more Option that is prefixed using With*.
 func NewConfig(opts ...Option) *Config {
 	cfg := &Config{
 		rules:  make(map[reflect.Type]func(r *rand.Rand) reflect.Value),
@@ -28,6 +33,7 @@ func NewConfig(opts ...Option) *Config {
 	return cfg
 }
 
+// Config for testdata. Use either the DefaultConfig or create one with NewConfig.
 type Config struct {
 	rules  map[reflect.Type]func(r *rand.Rand) reflect.Value
 	sticky *sticky.Manager
