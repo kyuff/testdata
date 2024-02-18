@@ -39,7 +39,11 @@ func Values[T any, E ~[]T](values E) {
 // generating a value of type T
 func WithValues[T any, E ~[]T](values E) Option {
 	return WithGenerator(func(r *rand.Rand) T {
-		return randFrom(r, values)
+		if len(values) == 0 {
+			var t T
+			return t
+		}
+		return values[r.IntN(len(values))]
 	})
 }
 
