@@ -5,16 +5,17 @@ import (
 	"reflect"
 )
 
+// Option to customize a Config.
 type Option func(cfg *Config)
 
 // Generator will override the default value generation and instead
-// use the supplied generator func for the default config.
+// use the supplied generator func for DefaultConfig.
 func Generator[T any](generator func(r *rand.Rand) T) {
 	WithGenerator(generator)(DefaultConfig)
 }
 
 // WithGenerator will override the default value generation and instead
-// use the supplied generator func for the config.
+// use the supplied generator func for the Config.
 func WithGenerator[T any](generator func(r *rand.Rand) T) Option {
 	return func(cfg *Config) {
 		var (
@@ -29,7 +30,7 @@ func WithGenerator[T any](generator func(r *rand.Rand) T) Option {
 }
 
 // Values will pick one of the supplied values when
-// generating a value of type T using the default config.
+// generating a value of type T using DefaultConfig.
 func Values[T any, E ~[]T](values E) {
 	WithValues(values)(DefaultConfig)
 }
@@ -43,7 +44,7 @@ func WithValues[T any, E ~[]T](values E) Option {
 }
 
 // Rand will use the provided *rand.Rand when generating
-// testdata using the DefaultConfig.
+// testdata using DefaultConfig.
 func Rand(r *rand.Rand) {
 	WithRand(r)(DefaultConfig)
 }
