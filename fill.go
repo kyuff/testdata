@@ -7,15 +7,15 @@ import (
 // FillSticky works like Fill, except values created with it, will be sticky within a t.
 // That means a value of a specific type will be the same for all those types,
 // even if it's a field on another Fill call, or it's to a pointer to the same type.
-func FillSticky[T any](t testingT, in T, modifications ...func(d T) T) T {
-	return FillStickyWith(t, DefaultConfig, in, modifications...)
+func FillSticky[T any](t testingT, initialValue T, modifications ...func(d T) T) T {
+	return FillStickyWith(t, DefaultConfig, initialValue, modifications...)
 }
 
 // FillStickyWith is similar to FillSticky, just using cfg instead of DefaultConfig.
-func FillStickyWith[T any](t testingT, cfg *Config, in T, modifications ...func(d T) T) T {
+func FillStickyWith[T any](t testingT, cfg *Config, initialValue T, modifications ...func(d T) T) T {
 	var (
 		typ   = reflect.TypeFor[T]()
-		value = FillWith(t, cfg, in, modifications...)
+		value = FillWith(t, cfg, initialValue, modifications...)
 	)
 
 	cfg.sticky.AddValue(t, typ, reflect.ValueOf(value))
@@ -23,16 +23,15 @@ func FillStickyWith[T any](t testingT, cfg *Config, in T, modifications ...func(
 	return value
 }
 
-// Fill returns a new value where zero-valued fields / value from the in parameter are filled with random values
-// Pointers that are nil will be set to a pointer that references a non zero value. This is also true for pointers to pointers
+// Fill returns a new value where zero-valued fields / value from the initialValue parameter are filled with random values
+// If initialValue is a nil pointer, Fill will return a pointer that references a non zero value.
 // If initialValue is a pointer to a zero-value, Fill will return a pointer to a non-zero value
-// Slice and Map types that are empty will be filled with values
-// Instead, it will return a new value where zero-valued fields / value are filled with random values
-func Fill[T any](t testingT, in T, modifications ...func(d T) T) T {
-	return FillWith(t, DefaultConfig, in, modifications...)
+// If initialValue is a Slice or Map type that are non-nil, but empty, Fill will return a value with non-zero values
+func Fill[T any](t testingT, initialValue T, modifications ...func(d T) T) T {
+	return FillWith(t, DefaultConfig, initialValue, modifications...)
 }
 
-// Fill is similar to Fill, just using cfg instead of DefaultConfig.
+// FillWith does the same as Fill, just using cfg instead of DefaultConfig.
 func FillWith[T any](t testingT, cfg *Config, initialValue T, modifications ...func(d T) T) T {
 	var (
 		value = initialValue
