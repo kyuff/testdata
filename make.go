@@ -11,29 +11,15 @@ type testingT interface {
 
 // Make creates a value T based on DefaultConfig
 func Make[T any](t testingT, modifications ...func(d T) T) T {
-	return MakeWith[T](t, DefaultConfig, modifications...)
+	return MakeWith(t, DefaultConfig, modifications...)
 }
 
 // MakeWith creates a value T based on tge Config parameter
 func MakeWith[T any](t testingT, cfg *Config, modifications ...func(d T) T) T {
 	var (
-		typ  = reflect.TypeFor[T]()
-		val  = cfg.make(t, typ)
 		data T
 	)
-
-	if val.Type().ConvertibleTo(typ) {
-		data = val.Convert(typ).Interface().(T)
-	} else if val.Type().AssignableTo(typ) {
-		data = val.Interface().(T)
-	} else if val.CanConvert(typ) {
-		data = val.Convert(typ).Interface().(T)
-	}
-
-	for _, modify := range modifications {
-		data = modify(data)
-	}
-
+	data = FillWith(t, cfg, data, modifications...)
 	return data
 }
 
@@ -48,7 +34,7 @@ func MakeSticky[T any](t testingT, modifications ...func(d T) T) T {
 func MakeStickyWith[T any](t testingT, cfg *Config, modifications ...func(d T) T) T {
 	var (
 		typ   = reflect.TypeFor[T]()
-		value = MakeWith[T](t, cfg, modifications...)
+		value = MakeWith(t, cfg, modifications...)
 	)
 
 	cfg.sticky.AddValue(t, typ, reflect.ValueOf(value))
