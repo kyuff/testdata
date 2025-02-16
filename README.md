@@ -1,5 +1,10 @@
 # Testdata generator for Go
 
+[![Build Status](https://github.com/kyuff/testdata/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/kyuff/testdata/actions/workflows/go.yml)
+[![Report Card](https://goreportcard.com/badge/github.com/kyuff/testdata)](https://goreportcard.com/report/github.com/kyuff/testdata/)
+[![Go Reference](https://pkg.go.dev/badge/github.com/kyuff/testdata.svg)](https://pkg.go.dev/github.com/kyuff/testdata)
+[![codecov](https://codecov.io/gh/kyuff/testdata/graph/badge.svg?token=HRK7MBJHFN)](https://codecov.io/gh/kyuff/testdata)
+
 Library to generate random and typed data for tests.
 
 ## Use case
